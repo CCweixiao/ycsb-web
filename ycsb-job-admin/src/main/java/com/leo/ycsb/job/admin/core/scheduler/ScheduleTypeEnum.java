@@ -7,6 +7,9 @@ import com.leo.ycsb.job.admin.core.util.I18nUtil;
  */
 public enum ScheduleTypeEnum {
 
+    /**
+     * 调度类型
+     */
     NONE(I18nUtil.getString("schedule_type_none")),
 
     /**
@@ -42,5 +45,6 @@ public enum ScheduleTypeEnum {
         }
         return defaultItem;
     }
+
 
 }

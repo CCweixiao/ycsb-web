@@ -59,6 +59,8 @@ public class XxlJobServiceImpl implements XxlJobService {
 
 	@Override
 	public ReturnT<String> add(XxlJobInfo jobInfo) {
+		jobInfo.setGlueType("BEAN");
+		jobInfo.setExecutorHandler("HBaseJobHandler");
 
 		// valid base
 		XxlJobGroup group = xxlJobGroupDao.load(jobInfo.getJobGroup());
@@ -167,6 +169,8 @@ public class XxlJobServiceImpl implements XxlJobService {
 
 	@Override
 	public ReturnT<String> update(XxlJobInfo jobInfo) {
+		jobInfo.setGlueType("BEAN");
+		jobInfo.setExecutorHandler("HBaseJobHandler");
 
 		// valid base
 		if (jobInfo.getJobDesc()==null || jobInfo.getJobDesc().trim().length()==0) {

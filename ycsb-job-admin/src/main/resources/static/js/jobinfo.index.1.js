@@ -67,7 +67,7 @@ $(function() {
 						"render": function ( data, type, row ) {
 							var glueTypeTitle = findGlueTypeTitle(row.glueType);
                             if (row.executorHandler) {
-                                return glueTypeTitle +"：" + row.executorHandler;
+                                return row.executorHandler;
                             } else {
                                 return glueTypeTitle;
                             }
@@ -245,7 +245,7 @@ $(function() {
 				},
 				dataType : "json",
 				success : function(data){
-					if (data.code == 200) {
+					if (data.code === 200) {
                         layer.msg( typeName + I18n.system_success );
                         if (needFresh) {
                             //window.location.reload();
@@ -275,12 +275,12 @@ $(function() {
             url : base_url + "/jobinfo/trigger",
             data : {
                 "id" : $("#jobTriggerModal .form input[name='id']").val(),
-                "executorParam" : $("#jobTriggerModal .textarea[name='executorParam']").val(),
-				"addressList" : $("#jobTriggerModal .textarea[name='addressList']").val()
+                "executorParam" : $("#jobTriggerModal .textarea[name='executorParam']").val()
+				/*"addressList" : $("#jobTriggerModal .textarea[name='addressList']").val()*/
             },
             dataType : "json",
             success : function(data){
-                if (data.code == 200) {
+                if (data.code === 200) {
                     $('#jobTriggerModal').modal('hide');
 
                     layer.msg( I18n.jobinfo_opt_run + I18n.system_success );

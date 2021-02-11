@@ -14,7 +14,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
 
 /**
  * XxlJob开发示例（Bean模式）
@@ -28,48 +27,8 @@ import java.util.concurrent.TimeUnit;
  * @author xuxueli 2019-12-11 21:52:51
  */
 @Component
-public class SampleXxlJob {
-    private static Logger logger = LoggerFactory.getLogger(SampleXxlJob.class);
-
-
-    /**
-     * 1、简单任务示例（Bean模式）
-     */
-    @XxlJob("demoJobHandler")
-    public void demoJobHandler() throws Exception {
-       /* XxlJobHelper.log("XXL-JOB, Hello World.");
-
-        for (int i = 0; i < 5; i++) {
-            XxlJobHelper.log("beat at:" + i);
-            TimeUnit.SECONDS.sleep(2);
-        }*/
-        // default success
-
-      /*  String[] args = new String[]{
-                "-db", "com.leo.ycsb.job.executor.db.HBaseClient",
-                "-P", "/Users/mac/leo_project/ycsb-web/ycsb-job-executor/src/main/resources/workloads/workloada",
-                "-p", "threads=10",
-                "-p", "table=usertable",
-                "-p", "columnfamily=family",
-                "-p", "recordcount=10000000",
-                "-s", "-load"
-        };*/
-
-        String[] args = new String[]{
-                "-db", "com.leo.ycsb.job.executor.db.HBaseClient",
-                "-P", "/Users/mac/leo_project/ycsb-web/ycsb-job-executor/src/main/resources/workloads/workloada",
-                "-p", "threads=10",
-                "-p", "table=usertable",
-                "-p", "columnfamily=family",
-                "-p", "recordcount=10000000",
-                "-p","operationcount=10000000",
-                "-s", "-t"
-        };
-
-
-        Client.mainWork(args);
-    }
-
+public class SampleJobHandler {
+    private static final Logger logger = LoggerFactory.getLogger(SampleJobHandler.class);
 
     /**
      * 2、分片广播任务

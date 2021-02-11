@@ -13,6 +13,20 @@
     <url>https://www.jielongping.com</url>
     <description>ycsb web</description>
 
+    <licenses>
+        <!-- 开源协议 -->
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+
+    <scm>
+        <!-- scm 信息 -->
+        <url>https://github.com/CCweixiao/ycsb-web</url>
+        <connection>https://github.com/CCweixiao/ycsb-web.git</connection>
+    </scm>
+
     <developers>
         <!-- 开发者信息 -->
         <developer>
