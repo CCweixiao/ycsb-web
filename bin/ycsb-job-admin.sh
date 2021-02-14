@@ -17,12 +17,13 @@ export MAIL_PASSWD="your email password"
 #JVM参数
 JVM_OPTS="-Dname=$AppName  -Duser.timezone=Asia/Shanghai -Xms512M -Xmx512M -XX:PermSize=256M -XX:MaxPermSize=512M -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDateStamps  -XX:+PrintGCDetails -XX:NewRatio=1 -XX:SurvivorRatio=30 -XX:+UseParallelGC -XX:+UseParallelOldGC"
 APP_HOME=`pwd`
-LOG_PATH=$APP_HOME/logs
+LOG_PATH=$APP_HOME/logs/ycsb-job-admin
+# 设置日志输出目录
+export LOGGING_PATH=$LOG_PATH
 
 if [ ! -d "$LOG_PATH" ]; then
-  mkdir $LOG_PATH
+  mkdir -p $LOG_PATH
 fi
-LOG_NAME=ycsb-web-admin.log
 
 if [ "$1" = "" ];
 then
@@ -44,7 +45,7 @@ function start()
 	    echo "$AppName is running..."
 	    echo "Please input the address http://127.0.0.1:$SERVER_PORT/ycsb-job-admin"
 	else
-		nohup java -jar  $JVM_OPTS $AppName > $LOG_PATH/$LOG_NAME 2>&1 &
+		nohup java -jar  $JVM_OPTS $AppName > /dev/null 2>&1 &
 		echo "Start $AppName success ..."
 		echo "Please input the address http://127.0.0.1:$SERVER_PORT/ycsb-job-admin"
 	fi
