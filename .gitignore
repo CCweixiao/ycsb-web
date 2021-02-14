@@ -6,3 +6,4 @@ target/
 .DS_Store
 .gitattributes
 logs/
+ycsb-job-admin/src/main/resources/application-dev.properties

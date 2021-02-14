@@ -70,12 +70,48 @@ YCSB，全称为"Yahoo！Cloud Serving Benchmark"， 是雅虎开发的用来对
 
 快马加鞭开发中
 
-## 4. 总结
+## 4. 开始使用
+
+### 4.1 ycsb-job-admin
+
+**编译打包和运行**
+
+```shell
+cd ycsb-web
+mvn clean package -DskipTests -Pprod -pl ycsb-job-admin -am
+
+mkdir ycsb-job-admin
+mv ycsb-job-admin-1.0.0.jar ycsb-job-admin/
+cd ycsb-job-admin
+sh ycsb-job-admin.sh start|status|stop|restart
+```
+
+### 4.2 系统配置
+
+```shell
+export SERVER_PORT="8888"
+export DB_HOST="127.0.0.1"
+export DB_PORT="3306"
+export DB_NAME="ycsb_web"
+export DB_USER="leo"
+export DB_PASSWORD="Yyf5211314!"
+export MAIL_HOST="smtp.aliyun.com"
+export MAIL_PORT="465"
+export MAIL_USER="weixiao.me@aliyun.com"
+export MAIL_FROM="weixiao.me@aliyun.com"
+export MAIL_PASSWD="your email password"
+
+# 上述所需的配置会传递给ycsb-job-admin的application.properties配置文件
+```
+
+
+
+## 5. 总结
 
 ycsb-web的idea源于JMeter，编码的实现则基于xxl-job和YCSB整合而来，两个毫不相干的项目，被强扭在了一起，看起来倒也契合，
 这强扭的瓜或许也挺甜。
 
-## 5. 特别鸣谢
+## 6. 特别鸣谢
 
 XXL-JOB、YCSB
 

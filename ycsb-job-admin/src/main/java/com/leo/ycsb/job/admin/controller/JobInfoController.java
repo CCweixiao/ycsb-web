@@ -60,7 +60,7 @@ public class JobInfoController {
         model.addAttribute("GlueTypeEnum", GlueTypeEnum.values());
         // 阻塞处理策略-字典
         model.addAttribute("ExecutorBlockStrategyEnum", Arrays.stream(ExecutorBlockStrategyEnum.values())
-                .filter(b -> b == ExecutorBlockStrategyEnum.SERIAL_EXECUTION).toArray());
+                .filter(b -> b == ExecutorBlockStrategyEnum.DISCARD_LATER).toArray());
         // 调度类型
         model.addAttribute("ScheduleTypeEnum", Arrays.stream(ScheduleTypeEnum.values())
                 .filter(type -> type != ScheduleTypeEnum.FIX_RATE).toArray());

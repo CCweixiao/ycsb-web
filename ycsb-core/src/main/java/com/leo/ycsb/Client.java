@@ -106,7 +106,7 @@ public final class Client {
 
   /**
    * The exporter class to be used. The default is
-   * com.leo.ycsb.measurements.exporter.TextMeasurementsExporter.
+   * com.leo.ycsb.measurements.exporter.XxlJobMeasurementsExporter.
    */
   public static final String EXPORTER_PROPERTY = "exporter";
 
@@ -226,8 +226,7 @@ public final class Client {
       }
 
       // if no exporter is provided the default text one will be used
-      String exporterStr = props.getProperty(EXPORTER_PROPERTY,
-              "com.leo.ycsb.measurements.exporter.TextMeasurementsExporter");
+      String exporterStr = props.getProperty(EXPORTER_PROPERTY, "com.leo.ycsb.measurements.exporter.XxlJobMeasurementsExporter");
       try {
         exporter = (MeasurementsExporter) Class.forName(exporterStr).getConstructor(OutputStream.class).newInstance(out);
       } catch (Exception e) {

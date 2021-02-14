@@ -26,6 +26,7 @@ recordcount=1000
 operationcount=1000
 exporter=com.leo.ycsb.measurements.exporter.XxlJobMeasurementsExporter
 workload=com.leo.ycsb.workloads.CoreWorkload
+measurementtype=hdrhistogram
 
 readallfields=true
 
@@ -35,4 +36,7 @@ scanproportion=0
 insertproportion=0
 
 requestdistribution=zipfian
+hdrhistogram.percentiles=95,99,999
+hdrhistogram.fileoutput=true
+hdrhistogram.output.path=/Users/mac/leo_project/ycsb-web/logs/logs/jobhandler/test
 
