@@ -98,12 +98,14 @@
     </profiles>
 
     <build>
+        <finalName>ycsb-job-admin-${project.version}</finalName>
         <!-- profile对资源的操作 -->
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
                 <excludes>
                     <exclude>application*.properties</exclude>
+                    <exclude>bin/**</exclude>
                 </excludes>
             </resource>
             <resource>
@@ -141,6 +143,27 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <descriptors>
+                        <descriptor>src/main/assembly.xml</descriptor>
+                    </descriptors>
+                    <outputDirectory>${project.build.directory}/dist/</outputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- docker -->
             <plugin>
                 <groupId>com.spotify</groupId>
