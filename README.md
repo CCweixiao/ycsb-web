@@ -86,7 +86,7 @@ cd ycsb-job-admin
 sh ycsb-job-admin.sh start|status|stop|restart
 ```
 
-### 4.2 系统配置
+**系统配置**
 
 ```shell
 export SERVER_PORT="8888"
@@ -102,6 +102,16 @@ export MAIL_FROM="weixiao.me@aliyun.com"
 export MAIL_PASSWD="your email password"
 
 # 上述所需的配置会传递给ycsb-job-admin的application.properties配置文件
+```
+
+### 4.2 ycsb-job-executor
+
+**编译打包和运行**
+
+```shell
+mvn clean package -DskipTests -pl ycsb-job-executor -am
+
+
 ```
 
 
