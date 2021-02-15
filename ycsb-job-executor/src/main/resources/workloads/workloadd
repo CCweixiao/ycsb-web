@@ -13,27 +13,30 @@
 # permissions and limitations under the License. See accompanying                                                                                                                 
 # LICENSE file.                                                                                                                                                                   
 
-
 # Yahoo! Cloud System Benchmark
-# Workload A: Update heavy workload
-#   Application example: Session store recording recent actions
+# Workload D: Read latest workload
+#   Application example: user status updates; people want to read the latest
 #                        
-#   Read/update ratio: 50/50
+#   Read/update/insert ratio: 95/0/5
 #   Default data size: 1 KB records (10 fields, 100 bytes each, plus key)
-#   Request distribution: zipfian
+#   Request distribution: latest
+
+# The insert order for this is hashed, not ordered. The "latest" items may be 
+# scattered around the keyspace if they are keyed by userid.timestamp. A workload
+# which orders items purely by time, and demands the latest, is very different than 
+# workload here (which we believe is more typical of how people build systems.)
 
 recordcount=1000
 operationcount=1000
 exporter=com.leo.ycsb.measurements.exporter.XxlJobMeasurementsExporter
 workload=com.leo.ycsb.workloads.CoreWorkload
-measurementtype=hdrhistogram
 
 readallfields=true
 
-readproportion=0.5
-updateproportion=0.5
+readproportion=0.95
+updateproportion=0
 scanproportion=0
-insertproportion=0
+insertproportion=0.05
 
-requestdistribution=zipfian
+requestdistribution=latest
 
