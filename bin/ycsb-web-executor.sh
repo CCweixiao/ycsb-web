@@ -84,8 +84,8 @@ function start()
 	    echo "$YCSB_APP_NAME is running..."
 	else
 		echo "$JAVA_OPTS -classpath "$CLASSPATH" $YCSB_WEB_EXECUTOR_CLASS $YCSB_APP_ARGS"
-		"$JAVA_HOME/bin/java" $JAVA_OPTS -classpath "$CLASSPATH" $YCSB_WEB_EXECUTOR_CLASS $YCSB_APP_ARGS
-		# nohup "$JAVA_HOME/bin/java" $JAVA_OPTS -classpath "$CLASSPATH" $YCSB_WEB_EXECUTOR_CLASS $YCSB_APP_ARGS > /dev/null 2>&1 &
+		# "$JAVA_HOME/bin/java" $JAVA_OPTS -classpath "$CLASSPATH" $YCSB_WEB_EXECUTOR_CLASS $YCSB_APP_ARGS
+		nohup "$JAVA_HOME/bin/java" $JAVA_OPTS -classpath "$CLASSPATH" $YCSB_WEB_EXECUTOR_CLASS $YCSB_APP_ARGS > /dev/null 2>&1 &
 		echo "Start $YCSB_APP_NAME success ..."
 	fi
 }
