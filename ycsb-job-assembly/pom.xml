@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>ycsb-web</artifactId>
+        <groupId>com.leo.ycsb</groupId>
+        <version>1.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>ycsb-job-assembly</artifactId>
+
+    <name>${project.artifactId}</name>
+    <description>assembly model of ycsb web.</description>
+    <url>https://www.jielongping.com/</url>
+    <packaging>pom</packaging>
+
+    <properties>
+        <tar.name>${project.build.finalName}.tar.gz</tar.name>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.leo.ycsb</groupId>
+            <artifactId>ycsb-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.leo.ycsb</groupId>
+            <artifactId>ycsb-job-admin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.leo.ycsb</groupId>
+            <artifactId>ycsb-job-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.leo.ycsb</groupId>
+            <artifactId>ycsb-job-executor</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <finalName>ycsb-web-${project.version}</finalName>
+                    <skipAssembly>false</skipAssembly>
+                    <appendAssemblyId>true</appendAssemblyId>
+
+                    <descriptors>
+                        <descriptor>src/main/assembly/assembly.xml</descriptor>
+                    </descriptors>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <excludeTransitive>false</excludeTransitive>
+                            <stripVersion>false</stripVersion>
+                            <includeScope>runtime</includeScope>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

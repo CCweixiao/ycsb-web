@@ -1,19 +1,68 @@
 #!/bin/bash
 
-AppName=ycsb-job-executor-1.0.0.jar
+SCRIPT_DIR=$(dirname "$0" 2>/dev/null)
+[ -z "$YCSB_WEB_HOME" ] && YCSB_WEB_HOME=$(cd "$SCRIPT_DIR/.." || exit; pwd)
+
+echo "the home dir of ycsb executor application is $YCSB_WEB_HOME"
+
+CLASSPATH=
+YCSB_APP_NAME="YcsbWebJobExecutorApplication"
+YCSB_WEB_EXECUTOR_CLASS="com.leo.ycsb.job.executor.YcsbWebJobExecutorApplication"
+YCSB_APP_ARGS="--spring.config.location=file://$YCSB_WEB_HOME/conf/ycsb-job-executor.properties --logging.config=$YCSB_WEB_HOME/conf/logback-spring.xml"
+
+# 设置系统运行所需的一些环境变量
+if [ -r "$YCSB_WEB_HOME/bin/ycsb-web-env.sh" ]; then
+  . "$YCSB_WEB_HOME/bin/ycsb-web-env.sh"
+fi
+
+# Attempt to find the available JAVA, if JAVA_HOME not set
+if [ -z "$JAVA_HOME" ]; then
+  JAVA_PATH=$(which java 2>/dev/null)
+  if [ "x$JAVA_PATH" != "x" ]; then
+    JAVA_HOME=$(dirname "$(dirname "$JAVA_PATH" 2>/dev/null)")
+  fi
+fi
+
+# If JAVA_HOME still not set, error
+if [ -z "$JAVA_HOME" ]; then
+  echo "[ERROR] Java executable not found. Exiting."
+  exit 1;
+else
+  echo "JAVA_HOME in current OS is $JAVA_HOME"
+fi
+
+
+# Add conf dir to classpath
+if [ -z "$CLASSPATH" ] ; then
+  CLASSPATH="$YCSB_WEB_HOME/conf"
+else
+  CLASSPATH="$CLASSPATH:$YCSB_WEB_HOME/conf"
+fi
+
+# Core libraries
+for f in "$YCSB_WEB_HOME"/lib/*.jar ; do
+  if [ -r "$f" ] ; then
+    CLASSPATH="$CLASSPATH:$f"
+  fi
+done
+
+for f in "$YCSB_WEB_HOME"/lib/executor/*.jar ; do
+  if [ -r "$f" ] ; then
+    CLASSPATH="$CLASSPATH:$f"
+  fi
+done
 
 #JVM参数
-JVM_OPTS="-Dname=$AppName  -Duser.timezone=Asia/Shanghai -Xms512M -Xmx512M -XX:PermSize=256M -XX:MaxPermSize=512M -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDateStamps  -XX:+PrintGCDetails -XX:NewRatio=1 -XX:SurvivorRatio=30 -XX:+UseParallelGC -XX:+UseParallelOldGC"
-APP_HOME=`pwd`
+JVM_OPTS="-Dname=$YCSB_APP_NAME -Duser.timezone=Asia/Shanghai -Xms512M -Xmx512M -XX:PermSize=256M -XX:MaxPermSize=512M -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDateStamps  -XX:+PrintGCDetails -XX:NewRatio=1 -XX:SurvivorRatio=30 -XX:+UseParallelGC -XX:+UseParallelOldGC"
+LOG_PATH=$YCSB_WEB_HOME/logs/ycsb-job-executor
+# 设置日志输出目录和日志文件名
+export YCSB_EXECUTOR_LOG_PATH=$LOG_PATH
+export YCSB_EXECUTOR_HANDLER_LOG_PATH=$LOG_PATH/job_handler
+export YCSB_EXECUTOR_LOG_NAME=ycsb-job-executor.log
 
-export YCSB_WEB_EXECUTOR_SERVER_PORT=8889
-export YCSB_WEB_ADMIN_ADDR="http://127.0.0.1:8888/ycsb-job-admin"
-export YCSB_WEB_EXECUTOR_NAME="ycsb-job-executor"
-export YCSB_WEB_EXECUTOR_ADDR="http://127.0.0.1:9999/"
-export YCSB_WEB_EXECUTOR_IP="127.0.0.1"
-export YCSB_WEB_EXECUTOR_PORT="9999"
-export EXECUTOR_LOG_PATH="$APP_HOME/logs/job_handler"
-
+if [ ! -d "$LOG_PATH" ]; then
+  mkdir -p $LOG_PATH
+fi
 
 if [ "$1" = "" ];
 then
@@ -21,7 +70,7 @@ then
     exit 1
 fi
 
-if [ "$AppName" = "" ];
+if [ "$YCSB_APP_NAME" = "" ];
 then
     echo -e "\033[0;31m 未输入应用名 \033[0m"
     exit 1
@@ -29,37 +78,39 @@ fi
 
 function start()
 {
-    PID=`ps -ef |grep java|grep $AppName|grep -v grep|awk '{print $2}'`
+    PID=`ps -ef |grep java|grep $YCSB_APP_NAME|grep -v grep|awk '{print $2}'`
 
 	if [ x"$PID" != x"" ]; then
-	    echo "$AppName is running..."
+	    echo "$YCSB_APP_NAME is running..."
 	else
-		nohup java -jar  $JVM_OPTS $AppName > /dev/null 2>&1 &
-		echo "Start $AppName success ..."
+		echo "$JAVA_OPTS -classpath "$CLASSPATH" $YCSB_WEB_EXECUTOR_CLASS $YCSB_APP_ARGS"
+		"$JAVA_HOME/bin/java" $JAVA_OPTS -classpath "$CLASSPATH" $YCSB_WEB_EXECUTOR_CLASS $YCSB_APP_ARGS
+		# nohup "$JAVA_HOME/bin/java" $JAVA_OPTS -classpath "$CLASSPATH" $YCSB_WEB_EXECUTOR_CLASS $YCSB_APP_ARGS > /dev/null 2>&1 &
+		echo "Start $YCSB_APP_NAME success ..."
 	fi
 }
 
 function stop()
 {
-    echo "Stop $AppName"
+    echo "Stop $YCSB_APP_NAME"
 
 	PID=""
 	query(){
-		PID=`ps -ef |grep java|grep $AppName|grep -v grep|awk '{print $2}'`
+		PID=`ps -ef |grep java|grep $YCSB_APP_NAME|grep -v grep|awk '{print $2}'`
 	}
 
 	query
 	if [ x"$PID" != x"" ]; then
 		kill -TERM $PID
-		echo "$AppName (pid:$PID) exiting..."
+		echo "$YCSB_APP_NAME (pid:$PID) exiting..."
 		while [ x"$PID" != x"" ]
 		do
 			sleep 1
 			query
 		done
-		echo "$AppName exited."
+		echo "$YCSB_APP_NAME exited."
 	else
-		echo "$AppName already stopped."
+		echo "$YCSB_APP_NAME already stopped."
 	fi
 }
 
@@ -72,11 +123,11 @@ function restart()
 
 function status()
 {
-    PID=`ps -ef |grep java|grep $AppName|grep -v grep|wc -l`
+    PID=`ps -ef |grep java|grep $YCSB_APP_NAME|grep -v grep|wc -l`
     if [ $PID != 0 ];then
-        echo "$AppName is running..."
+        echo "$YCSB_APP_NAME is running..."
     else
-        echo "$AppName is not running..."
+        echo "$YCSB_APP_NAME is not running..."
     fi
 }
 

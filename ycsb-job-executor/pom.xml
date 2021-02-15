@@ -44,7 +44,6 @@
         <dependency>
             <groupId>com.leo.ycsb</groupId>
             <artifactId>ycsb-core</artifactId>
-            <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
@@ -56,72 +55,9 @@
     </dependencies>
 
     <build>
-        <finalName>ycsb-job-executor-${project.version}</finalName>
+        <finalName>${project.artifactId}-${project.version}</finalName>
 
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <compilerVersion>${java.version}</compilerVersion>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                    <optimize>true</optimize>
-                    <maxmem>1024m</maxmem>
-                    <fork>true</fork>
-                    <compilerArgs>
-                        <arg>-Xlint:all,-serial,-path</arg>
-                    </compilerArgs>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <excludeTransitive>false</excludeTransitive>
-                            <stripVersion>false</stripVersion>
-                            <includeScope>runtime</includeScope>
-                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <appendAssemblyId>false</appendAssemblyId>
-                    <descriptors>
-                        <descriptor>src/main/assembly.xml</descriptor>
-                    </descriptors>
-                    <outputDirectory>${project.build.directory}/dist/</outputDirectory>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -129,39 +65,11 @@
                 <configuration>
                     <classesDirectory>target/classes/</classesDirectory>
                     <excludes>
-                        <exclude>*.yml</exclude>
-                        <exclude>*.yaml</exclude>
-                        <exclude>*.txt</exclude>
-                        <exclude>*.xml</exclude>
-                        <exclude>*.properties</exclude>
-                        <exclude>mybatis/**</exclude>
-                        <exclude>ehcache/**</exclude>
-                        <exclude>bin/**</exclude>
                         <exclude>workloads/**</exclude>
-                        <exclude>sql/**</exclude>
-                        <exclude>conf/**</exclude>
-                        <exclude>static/**</exclude>
-                        <exclude>templates/**</exclude>
-                        <exclude>**/*.yml</exclude>
-                        <exclude>**/*.xml</exclude>
-                        <exclude>**/*.yaml</exclude>
-                        <exclude>**/*.properties</exclude>
                     </excludes>
-                    <archive>
-                        <manifest>
-                            <mainClass>com.leo.ycsb.job.executor.YcsbWebJobExecutorApplication</mainClass>
-                            <addClasspath>true</addClasspath>
-                            <useUniqueVersions>false</useUniqueVersions>
-                            <classpathPrefix>lib/</classpathPrefix>
-                        </manifest>
-                        <manifestEntries>
-                            <Class-Path>conf/</Class-Path>
-                        </manifestEntries>
-                    </archive>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
 
 </project>

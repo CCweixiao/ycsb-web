@@ -1,0 +1,131 @@
+<assembly
+        xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+    <id>bin</id>
+    <formats>
+        <format>tar.gz</format>
+    </formats>
+
+    <includeBaseDirectory>true</includeBaseDirectory>
+
+    <fileSets>
+        <fileSet>
+            <directory>${project.basedir}/..</directory>
+            <outputDirectory>.</outputDirectory>
+            <includes>
+                <include>README.md</include>
+                <include>LICENSE</include>
+                <include>README.txt</include>
+            </includes>
+            <fileMode>0644</fileMode>
+        </fileSet>
+
+        <fileSet>
+            <directory>${project.basedir}/../conf</directory>
+            <outputDirectory>conf</outputDirectory>
+            <fileMode>0644</fileMode>
+            <directoryMode>0755</directoryMode>
+        </fileSet>
+
+        <fileSet>
+            <directory>${project.basedir}/../bin</directory>
+            <outputDirectory>bin/</outputDirectory>
+            <excludes>
+                <exclude>**/*.cmd</exclude>
+            </excludes>
+            <fileMode>0755</fileMode>
+            <directoryMode>0755</directoryMode>
+        </fileSet>
+
+        <fileSet>
+            <directory>${project.basedir}/../bin</directory>
+            <outputDirectory>bin/</outputDirectory>
+            <includes>
+                <include>**/*.cmd</include>
+            </includes>
+        </fileSet>
+
+        <fileSet>
+            <directory>${project.basedir}/../ycsb-job-admin/target/classes/ycsb-webapps</directory>
+            <outputDirectory>ycsb-webapps/</outputDirectory>
+            <fileMode>0644</fileMode>
+            <directoryMode>0755</directoryMode>
+        </fileSet>
+
+        <fileSet>
+            <directory>${project.basedir}/../ycsb-job-executor/target/classes/workloads</directory>
+            <outputDirectory>workloads/</outputDirectory>
+            <fileMode>0644</fileMode>
+            <directoryMode>0755</directoryMode>
+        </fileSet>
+
+    </fileSets>
+
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>lib/admin</outputDirectory>
+            <includes>
+                <include>org.springframework.boot:spring-boot-starter-freemarker</include>
+                <include>org.freemarker:freemarker</include>
+                <include>org.springframework.boot:spring-boot-starter-mail</include>
+                <include>org.springframework.boot:spring-boot-starter-actuator</include>
+                <include>org.springframework.boot:spring-boot-starter-jdbc</include>
+                <include>org.springframework:spring-jdbc</include>
+                <include>org.mybatis.spring.boot:mybatis-spring-boot-autoconfigure</include>
+                <include>org.mybatis.spring.boot:mybatis-spring-boot-starter</include>
+                <include>org.mybatis:mybatis</include>
+                <include>org.mybatis:mybatis-spring</include>
+                <include>mysql:mysql-connector-java</include>
+                <include>com.leo.ycsb:ycsb-job-core</include>
+                <include>com.leo.ycsb:ycsb-job-admin</include>
+            </includes>
+        </dependencySet>
+        <dependencySet>
+            <outputDirectory>lib/executor</outputDirectory>
+            <includes>
+                <include>org.apache.htrace:htrace-core4</include>
+                <include>org.codehaus.jackson:jackson-mapper-asl</include>
+                <include>org.codehaus.jackson:jackson-core-asl</include>
+                <include>org.hdrhistogram:HdrHistogram</include>
+                <include>org.apache.hbase:hbase-shaded-client</include>
+                <include>com.leo.ycsb:ycsb-core</include>
+                <include>com.leo.ycsb:ycsb-job-core</include>
+                <include>com.leo.ycsb:ycsb-job-executor</include>
+            </includes>
+        </dependencySet>
+
+        <dependencySet>
+            <!--依赖包的输出目录-->
+            <outputDirectory>/lib</outputDirectory>
+            <scope>runtime</scope>
+            <excludes>
+                <!-- exclude admin -->
+                <exclude>org.springframework.boot:spring-boot-starter-freemarker</exclude>
+                <exclude>org.freemarker:freemarker</exclude>
+                <exclude>org.springframework.boot:spring-boot-starter-mail</exclude>
+                <exclude>org.springframework.boot:spring-boot-starter-actuator</exclude>
+                <exclude>org.springframework.boot:spring-boot-starter-jdbc</exclude>
+                <exclude>org.springframework:spring-jdbc</exclude>
+                <exclude>org.mybatis.spring.boot:mybatis-spring-boot-autoconfigure</exclude>
+                <exclude>org.mybatis.spring.boot:mybatis-spring-boot-starter</exclude>
+                <exclude>org.mybatis:mybatis</exclude>
+                <exclude>org.mybatis:mybatis-spring</exclude>
+                <exclude>mysql:mysql-connector-java</exclude>
+                <!-- exclude executor -->
+                <exclude>org.apache.htrace:htrace-core4</exclude>
+                <exclude>org.codehaus.jackson:jackson-mapper-asl</exclude>
+                <exclude>org.codehaus.jackson:jackson-core-asl</exclude>
+                <exclude>org.hdrhistogram:HdrHistogram</exclude>
+                <exclude>org.apache.hbase:hbase-shaded-client</exclude>
+                <!-- exclude ycsb-web -->
+                <exclude>com.leo.ycsb:ycsb-core</exclude>
+                <exclude>com.leo.ycsb:ycsb-job-admin</exclude>
+                <exclude>com.leo.ycsb:ycsb-job-executor</exclude>
+                <exclude>com.leo.ycsb:ycsb-job-core</exclude>
+                <exclude>org.slf4j:slf4j-log4j12</exclude>
+            </excludes>
+        </dependencySet>
+
+    </dependencySets>
+</assembly>

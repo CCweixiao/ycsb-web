@@ -47,6 +47,7 @@
         <module>ycsb-job-core</module>
         <module>ycsb-job-admin</module>
         <module>ycsb-job-executor</module>
+        <module>ycsb-job-assembly</module>
     </modules>
 
     <properties>
@@ -56,6 +57,7 @@
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.version>3.5.1</maven.compiler.version>
         <java.version>1.8</java.version>
         <maven.test.skip>true</maven.test.skip>
 
@@ -76,8 +78,43 @@
 
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.leo.ycsb</groupId>
+                <artifactId>ycsb-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.leo.ycsb</groupId>
+                <artifactId>ycsb-job-admin</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.leo.ycsb</groupId>
+                <artifactId>ycsb-job-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.leo.ycsb</groupId>
+                <artifactId>ycsb-job-executor</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <configuration>
+                        <skipAssembly>true</skipAssembly>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -86,6 +123,31 @@
                 <configuration>
                     <generateBackupPoms>false</generateBackupPoms>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <compilerVersion>${java.version}</compilerVersion>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <optimize>true</optimize>
+                    <maxmem>1024m</maxmem>
+                    <fork>true</fork>
+                    <compilerArgs>
+                        <arg>-Xlint:all,-serial,-path</arg>
+                    </compilerArgs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

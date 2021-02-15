@@ -52,7 +52,6 @@
         <dependency>
             <groupId>com.leo.ycsb</groupId>
             <artifactId>ycsb-job-core</artifactId>
-            <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
 
