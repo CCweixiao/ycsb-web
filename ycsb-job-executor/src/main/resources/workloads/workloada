@@ -37,6 +37,6 @@ insertproportion=0
 
 requestdistribution=zipfian
 hdrhistogram.percentiles=95,99,999
-hdrhistogram.fileoutput=true
-hdrhistogram.output.path=/Users/mac/leo_project/ycsb-web/logs/logs/jobhandler/test
+#hdrhistogram.fileoutput=true
+#hdrhistogram.output.path=/Users/mac/leo_project/ycsb-web/logs/logs/jobhandler/test
 
