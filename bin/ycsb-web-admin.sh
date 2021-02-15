@@ -1,19 +1,29 @@
 #!/bin/bash
 
-AppName=ycsb-job-executor-1.0.0.jar
+AppName=ycsb-job-admin-1.0.0.jar
+
+export SERVER_PORT="8888"
+export DB_HOST="127.0.0.1"
+export DB_PORT="3306"
+export DB_NAME="ycsb_web"
+export DB_USER="leo"
+export DB_PASSWORD="Yyf5211314!"
+export MAIL_HOST="smtp.aliyun.com"
+export MAIL_PORT="465"
+export MAIL_USER="weixiao.me@aliyun.com"
+export MAIL_FROM="weixiao.me@aliyun.com"
+export MAIL_PASSWD="your email password"
 
 #JVM参数
 JVM_OPTS="-Dname=$AppName  -Duser.timezone=Asia/Shanghai -Xms512M -Xmx512M -XX:PermSize=256M -XX:MaxPermSize=512M -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDateStamps  -XX:+PrintGCDetails -XX:NewRatio=1 -XX:SurvivorRatio=30 -XX:+UseParallelGC -XX:+UseParallelOldGC"
 APP_HOME=`pwd`
+LOG_PATH=$APP_HOME/logs/ycsb-job-admin
+# 设置日志输出目录
+export LOGGING_PATH=$LOG_PATH
 
-export YCSB_WEB_EXECUTOR_SERVER_PORT=8889
-export YCSB_WEB_ADMIN_ADDR="http://127.0.0.1:8888/ycsb-job-admin"
-export YCSB_WEB_EXECUTOR_NAME="ycsb-job-executor"
-export YCSB_WEB_EXECUTOR_ADDR="http://127.0.0.1:9999/"
-export YCSB_WEB_EXECUTOR_IP="127.0.0.1"
-export YCSB_WEB_EXECUTOR_PORT="9999"
-export EXECUTOR_LOG_PATH="$APP_HOME/logs/job_handler"
-
+if [ ! -d "$LOG_PATH" ]; then
+  mkdir -p $LOG_PATH
+fi
 
 if [ "$1" = "" ];
 then
@@ -33,9 +43,11 @@ function start()
 
 	if [ x"$PID" != x"" ]; then
 	    echo "$AppName is running..."
+	    echo "Please visit the address http://127.0.0.1:$SERVER_PORT/ycsb-job-admin"
 	else
 		nohup java -jar  $JVM_OPTS $AppName > /dev/null 2>&1 &
 		echo "Start $AppName success ..."
+		echo "Please visit the address http://127.0.0.1:$SERVER_PORT/ycsb-job-admin"
 	fi
 }
 
@@ -75,6 +87,7 @@ function status()
     PID=`ps -ef |grep java|grep $AppName|grep -v grep|wc -l`
     if [ $PID != 0 ];then
         echo "$AppName is running..."
+        echo "Please visit the address http://127.0.0.1:$SERVER_PORT/ycsb-job-admin"
     else
         echo "$AppName is not running..."
     fi
