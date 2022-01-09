@@ -4,11 +4,11 @@
 # ycsb web admin web服务的端口号
 export YCSB_ADMIN_SERVER_PORT="8888"
 # ycsb web admin数据库配置
-export YCSB_ADMIN_DB_HOST="127.0.0.1"
+export YCSB_ADMIN_DB_HOST="dev"
 export YCSB_ADMIN_DB_PORT="3306"
 export YCSB_ADMIN_DB_NAME="ycsb_web"
-export YCSB_ADMIN_DB_USER="leo"
-export YCSB_ADMIN_DB_PASSWORD="Yyf5211314!"
+export YCSB_ADMIN_DB_USER="dev"
+export YCSB_ADMIN_DB_PASSWORD="is@DEV"
 # ycsb web admin的报警邮箱配置
 export YCSB_ADMIN_MAIL_HOST="smtp.aliyun.com"
 export YCSB_ADMIN_MAIL_PORT="465"

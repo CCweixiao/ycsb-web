@@ -18,6 +18,7 @@
 package com.leo.ycsb;
 
 import com.leo.ycsb.job.core.context.XxlJobHelper;
+import com.leo.ycsb.job.core.util.FileUtil;
 import com.leo.ycsb.measurements.exporter.XxlJobMeasurementsExporter;
 import org.apache.htrace.core.HTraceConfiguration;
 import org.apache.htrace.core.TraceScope;
@@ -569,6 +570,12 @@ public final class Client {
 
                 Properties myfileprops = new Properties();
                 try {
+                    myfileprops.load(new FileReader(propfile));
+                } catch (IOException e) {
+                    throw new YcsbException("Unable to open the properties file " + propfile);
+                }
+                XxlJobHelper.log("load workload file " + propfile + " successfully!");
+/*                try {
                     myfileprops.load(Client.class.getClassLoader().getResourceAsStream("workloads/" + propfile));
                     XxlJobHelper.log("load workload file workloads/" + propfile + " successfully!");
                 } catch (Exception e) {
@@ -580,7 +587,7 @@ public final class Client {
                         XxlJobHelper.log(ioe.getMessage());
                         throw new YcsbException("Unable to open the properties file " + propfile);
                     }
-                }
+                }*/
 
                 //Issue #5 - remove call to stringPropertyNames to make compilable under Java 1.5
                 for (Enumeration e = myfileprops.propertyNames(); e.hasMoreElements(); ) {

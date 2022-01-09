@@ -7,3 +7,5 @@ target/
 .gitattributes
 logs/
 ycsb-job-admin/src/main/resources/application-dev.properties
+conf/ycsb-job-admin-dev.properties
+conf/ycsb-job-executor-dev.properties

@@ -29,7 +29,11 @@ import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.filter.PageFilter;
 import org.apache.hadoop.hbase.util.Bytes;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Map;
@@ -122,11 +126,13 @@ public class HBaseClient extends com.leo.ycsb.DB{
         }
 
         String table = getProperties().getProperty(TABLENAME_PROPERTY, TABLENAME_PROPERTY_DEFAULT);
+        String configFilePath = getProperties().getProperty("hbase.config.file.path","hbase-site.xml");
         try {
             THREAD_COUNT.getAndIncrement();
             synchronized (THREAD_COUNT) {
                 if (connection == null) {
                     // Initialize if not set up already.
+                    config.addResource(new FileInputStream(configFilePath));
                     connection = ConnectionFactory.createConnection(config);
 
                     // Terminate right now if table does not exist, since the client
