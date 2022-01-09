@@ -138,7 +138,8 @@ conf目录时系统的配置文件目录
 
 ![conf](https://leo-jie-pic.oss-cn-beijing.aliyuncs.com/leo_blog/2021-02-15-150131.jpg)
 
-workloads 目录对应着ycsb的workloads
+conf/sql 目录中的ycsb_web.sql文件需要执行下初始化数据库
+conf/workloads 目录对应着ycsb的workloads
 ycsb-webapps是系统的静态资源目录，不用关注
 logs目录是系统的日志目录
 
