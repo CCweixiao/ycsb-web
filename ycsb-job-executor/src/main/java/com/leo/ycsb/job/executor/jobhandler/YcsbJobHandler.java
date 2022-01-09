@@ -13,10 +13,10 @@ import java.util.Arrays;
  * @author leojie
  */
 @Component
-public class YcsbJob {
-    private static final Logger logger = LoggerFactory.getLogger(YcsbJob.class);
+public class YcsbJobHandler {
+    private static final Logger logger = LoggerFactory.getLogger(YcsbJobHandler.class);
 
-    @XxlJob("HBaseJobHandler")
+    @XxlJob(value = "HBaseJobHandler", init = "init", destroy = "destroy")
     public void hbaseJobHandler() throws Exception {
         // param parse
         String param = XxlJobHelper.getJobParam();
@@ -27,8 +27,14 @@ public class YcsbJob {
         }
        String[] args = Arrays.stream(param.split("\\s+"))
                 .filter(x -> x != null && x.trim().length()>0).toArray(String[]::new);
-
         Client.mainWork(args);
     }
 
+    public void init() {
+        logger.info("YcsbJobHandler Init ...");
+    }
+
+    public void destroy() {
+        logger.info("YcsbJobHandler Destroy ...");
+    }
 }

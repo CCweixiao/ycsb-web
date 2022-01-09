@@ -34,7 +34,16 @@ YCSB，全称为"Yahoo！Cloud Serving Benchmark"， 是雅虎开发的用来对
 
 ### 3.2 任务管理
 
-创建一个YCSB的压测任务，可以设置为定时调度，也可以设置为一次执行
+创建一个YCSB的压测任务，可以设置为定时调度，也可以设置为一次执行，
+任务参数示例：
+```shell
+-db com.leo.ycsb.job.executor.db.HBaseClient 
+-P /Users/leojie/other_project/ycsb-web/conf/workloads/workloada 
+-p hbase.config.file.path=/Users/leojie/other_project/ycsb-web/conf/hbase-site.xml 
+-p table=usertable -p columnfamily=info 
+-p recordcount=1000000 -p operationcount=1000000 
+-p threadcount=20 -s -t
+```
 
 ![create-task](https://leo-jie-pic.oss-cn-beijing.aliyuncs.com/leo_blog/2021-02-11-%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_b7609394-c1ab-4157-8c66-1885055cc8dd.png)
 

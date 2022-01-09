@@ -565,35 +565,28 @@ public final class Client {
                     usageMessage();
                     throw new YcsbException("Missing argument value for -P.");
                 }
-                String propfile = args[argindex];
+                String workloadFile = args[argindex];
                 argindex++;
 
-                Properties myfileprops = new Properties();
+                Properties workloadProps = new Properties();
                 try {
-                    myfileprops.load(new FileReader(propfile));
+                    workloadProps.load(new FileReader(workloadFile));
                 } catch (IOException e) {
-                    throw new YcsbException("Unable to open the properties file " + propfile);
-                }
-                XxlJobHelper.log("load workload file " + propfile + " successfully!");
-/*                try {
-                    myfileprops.load(Client.class.getClassLoader().getResourceAsStream("workloads/" + propfile));
-                    XxlJobHelper.log("load workload file workloads/" + propfile + " successfully!");
-                } catch (Exception e) {
+                    XxlJobHelper.log("load workload file " + workloadFile + " failed!");
                     try {
-                        XxlJobHelper.log("load workload file workloads/" + propfile + " failed!");
-                        myfileprops.load(new FileReader(System.getProperty("user.dir") + "/workloads/" + propfile));
-                        XxlJobHelper.log("load workload file "+ System.getProperty("user.dir")+"/workloads/" + propfile + " successfully!");
-                    } catch (IOException ioe) {
-                        XxlJobHelper.log(ioe.getMessage());
-                        throw new YcsbException("Unable to open the properties file " + propfile);
+                        workloadFile = System.getProperty("user.dir") + "/conf/workloads/" + workloadFile;
+                        workloadProps.load(new FileReader(workloadFile));
+                    } catch (IOException ex) {
+                        XxlJobHelper.log(ex.getMessage());
+                        throw new YcsbException("Unable to load the properties file " + workloadFile);
                     }
-                }*/
+                }
+                XxlJobHelper.log("load workload file " + workloadFile + " successfully!");
 
                 //Issue #5 - remove call to stringPropertyNames to make compilable under Java 1.5
-                for (Enumeration e = myfileprops.propertyNames(); e.hasMoreElements(); ) {
+                for (Enumeration e = workloadProps.propertyNames(); e.hasMoreElements(); ) {
                     String prop = (String) e.nextElement();
-
-                    fileprops.setProperty(prop, myfileprops.getProperty(prop));
+                    fileprops.setProperty(prop, workloadProps.getProperty(prop));
                 }
 
             } else if (args[argindex].compareTo("-p") == 0) {
