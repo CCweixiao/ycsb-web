@@ -95,6 +95,7 @@ public class StatusThread extends Thread {
     sleeptimeNs = TimeUnit.SECONDS.toNanos(statusIntervalSeconds);
     measurements = Measurements.getMeasurements();
     this.trackJVMStats = trackJVMStats;
+    this.setName("YCSB-Status-Thread");
   }
 
   /**

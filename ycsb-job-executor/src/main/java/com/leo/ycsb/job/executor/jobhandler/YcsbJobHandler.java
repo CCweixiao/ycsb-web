@@ -36,5 +36,6 @@ public class YcsbJobHandler {
 
     public void destroy() {
         logger.info("YcsbJobHandler Destroy ...");
+        Client.toStop();
     }
 }

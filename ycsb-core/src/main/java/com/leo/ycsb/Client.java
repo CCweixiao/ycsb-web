@@ -156,6 +156,8 @@ public final class Client {
      */
     private static StatusThread statusthread = null;
 
+    private static volatile boolean toStop = false;
+
     // HTrace integration related constants.
 
     /**
@@ -318,6 +320,7 @@ public final class Client {
         }
 
         Thread terminator = null;
+        // Thread toStopThread = null;
         long st;
         long en;
         int opsDone;
@@ -334,6 +337,11 @@ public final class Client {
             for (Thread t : threads.keySet()) {
                 t.start();
             }
+
+          /*  toStopThread = new StopYcsbProcessThread(threads.keySet(), workload);
+            while (toStop) {
+                toStopThread.start();
+            }*/
 
             if (maxExecutionTime > 0) {
                 terminator = new TerminatorThread(maxExecutionTime, threads.keySet(), workload);
@@ -410,7 +418,7 @@ public final class Client {
             }
             if (threadcount > opcount) {
                 threadcount = opcount;
-                System.out.println("Warning: the threadcount is bigger than recordcount, the threadcount will be recordcount!");
+                XxlJobHelper.log("Warning: the threadcount is bigger than recordcount, the threadcount will be recordcount!");
             }
             for (int threadid = 0; threadid < threadcount; threadid++) {
                 DB db;
@@ -429,8 +437,7 @@ public final class Client {
                     ++threadopcount;
                 }
 
-                ClientThread t = new ClientThread(db, dotransactions, workload, props, threadopcount, targetperthreadperms,
-                        completeLatch);
+                ClientThread t = new ClientThread(db, dotransactions, workload, props, threadopcount, targetperthreadperms, completeLatch);
                 t.setThreadId(threadid);
                 t.setThreadCount(threadcount);
                 clients.add(t);
@@ -643,4 +650,10 @@ public final class Client {
 
         return props;
     }
+
+    public static void toStop() {
+        toStop = true;
+    }
+
+
 }

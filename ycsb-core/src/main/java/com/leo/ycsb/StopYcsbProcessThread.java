@@ -21,42 +21,26 @@ import com.leo.ycsb.job.core.context.XxlJobHelper;
 import java.util.Collection;
 
 /**
- * A thread that waits for the maximum specified time and then interrupts all the client
- * threads passed at initialization of this thread.
+ * A thread that waits to stop ycsb process and then interrupts all the client
  *
- * The maximum execution time passed is assumed to be in seconds.
  * @author leo
  */
-public class TerminatorThread extends Thread {
+public class StopYcsbProcessThread extends Thread {
 
   private final Collection<? extends Thread> threads;
-  private long maxExecutionTime;
-  private Workload workload;
-  private long waitTimeOutInMS;
+  private final Workload workload;
+  private final long waitTimeOutInMS;
 
-  public TerminatorThread(long maxExecutionTime, Collection<? extends Thread> threads,
-                          Workload workload) {
-    this.maxExecutionTime = maxExecutionTime;
+  public StopYcsbProcessThread(Collection<? extends Thread> threads, Workload workload) {
     this.threads = threads;
     this.workload = workload;
     waitTimeOutInMS = 2000;
-    this.setName("YCSB-Terminator-Thread");
-    System.err.println("Maximum execution time specified as: " + maxExecutionTime + " secs");
-    XxlJobHelper.log("Maximum execution time specified as: " + maxExecutionTime + " secs");
   }
 
   @Override
   public void run() {
-    try {
-      Thread.sleep(maxExecutionTime * 1000);
-    } catch (InterruptedException e) {
-      System.err.println("Could not wait until max specified time, TerminatorThread interrupted.");
-      XxlJobHelper.log("Could not wait until max specified time, TerminatorThread interrupted.");
-      return;
-    }
-    System.err.println("Maximum time elapsed. Requesting stop for the workload.");
-    XxlJobHelper.log("Maximum time elapsed. Requesting stop for the workload.");
-
+    System.err.println("Requesting stop for the workload.");
+    XxlJobHelper.log("Requesting stop for the workload.");
     workload.requestStop();
     System.err.println("Stop requested for workload. Now Joining!");
     XxlJobHelper.log("Stop requested for workload. Now Joining!");
@@ -66,12 +50,13 @@ public class TerminatorThread extends Thread {
           t.join(waitTimeOutInMS);
           if (t.isAlive()) {
             System.out.println("Still waiting for thread " + t.getName() + " to complete. " +
-                "Workload status: " + workload.isStopRequested());
+                    "Workload status: " + workload.isStopRequested());
             XxlJobHelper.log("Still waiting for thread " + t.getName() + " to complete. " +
                     "Workload status: " + workload.isStopRequested());
           }
         } catch (InterruptedException e) {
-          // Do nothing. Don't know why I was interrupted.
+          XxlJobHelper.log("Failed to stop for the workload.");
+          XxlJobHelper.log(e.getMessage());
         }
       }
     }

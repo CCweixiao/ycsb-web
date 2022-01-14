@@ -70,7 +70,7 @@ public class ClientThread implements Runnable {
     }
     this.props = props;
     measurements = Measurements.getMeasurements();
-    spinSleep = Boolean.valueOf(this.props.getProperty("spin.sleep", "false"));
+    spinSleep = Boolean.parseBoolean(this.props.getProperty("spin.sleep", "false"));
     this.completeLatch = completeLatch;
   }
 
@@ -182,6 +182,6 @@ public class ClientThread implements Runnable {
    */
   int getOpsTodo() {
     int todo = opcount - opsdone;
-    return todo < 0 ? 0 : todo;
+    return Math.max(todo, 0);
   }
 }
