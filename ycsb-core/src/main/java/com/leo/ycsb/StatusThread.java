@@ -17,6 +17,7 @@
 
 package com.leo.ycsb;
 
+import com.leo.ycsb.common.RemainingFormatter;
 import com.leo.ycsb.job.core.context.XxlJobHelper;
 import com.leo.ycsb.measurements.Measurements;
 
