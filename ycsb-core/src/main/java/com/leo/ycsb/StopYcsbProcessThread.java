@@ -35,6 +35,7 @@ public class StopYcsbProcessThread extends Thread {
     this.threads = threads;
     this.workload = workload;
     waitTimeOutInMS = 2000;
+    this.setName("YCSB-Stop-Ycsb-Process-Thread");
   }
 
   @Override

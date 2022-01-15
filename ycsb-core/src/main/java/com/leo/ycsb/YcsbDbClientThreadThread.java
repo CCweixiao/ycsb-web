@@ -47,7 +47,7 @@ public final class YcsbDbClientThreadThread extends AbstractYcsbDbClientThread {
     /**
      * ycsb 执行客户端请求的线程数
      */
-    private Map<Thread, ClientThread> threads = new HashMap<>();
+    private Map<Thread, ClientThread> clientThreads = new HashMap<>();
 
     private Workload workload = null;
 
@@ -55,11 +55,6 @@ public final class YcsbDbClientThreadThread extends AbstractYcsbDbClientThread {
      * An optional thread used to track progress and measure JVM stats.
      */
     private StatusThread statusthread = null;
-
-    /**
-     * 终止任务的线程
-     */
-    private Thread terminator = null;
 
     private volatile boolean toStop = false;
 
@@ -226,14 +221,14 @@ public final class YcsbDbClientThreadThread extends AbstractYcsbDbClientThread {
     }
 
     public void toStop() {
-        this.terminator = new TerminatorThread(2, threads.keySet(), workload);
-        this.terminator.start();
+        StopYcsbProcessThread stopThread = new StopYcsbProcessThread(clientThreads.keySet(), workload);
+        stopThread.start();
         try {
-            this.terminator.join();
+            stopThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        toStop = true;
+        this.toStop = true;
     }
 
     @Override
@@ -287,28 +282,29 @@ public final class YcsbDbClientThreadThread extends AbstractYcsbDbClientThread {
             long st;
             long en;
             int opsDone;
+            Thread terminator = null;
+
             try (final TraceScope span = tracer.newScope(CLIENT_WORKLOAD_SPAN)) {
 
-                this.threads = new HashMap<>(threadCount);
+                this.clientThreads = new HashMap<>(threadCount);
                 for (ClientThread client : clients) {
-                    threads.put(new Thread(tracer.wrap(client, "ClientThread")), client);
+                    clientThreads.put(new Thread(tracer.wrap(client, "ClientThread")), client);
                 }
 
                 st = System.currentTimeMillis();
 
-                for (Thread t : threads.keySet()) {
+                for (Thread t : clientThreads.keySet()) {
                     t.start();
                 }
 
-
                 if (maxExecutionTime > 0) {
-                    terminator = new TerminatorThread(maxExecutionTime, threads.keySet(), workload);
+                    terminator = new TerminatorThread(maxExecutionTime, clientThreads.keySet(), workload);
                     terminator.start();
                 }
 
                 opsDone = 0;
 
-                for (Entry<Thread, ClientThread> entry : threads.entrySet()) {
+                for (Entry<Thread, ClientThread> entry : clientThreads.entrySet()) {
                     try {
                         entry.getKey().join();
                         opsDone += entry.getValue().getOpsDone();
