@@ -133,18 +133,18 @@ public final class YcsbDbClientThreadThread extends AbstractYcsbDbClientThread {
 
         final List<ClientThread> clients = new ArrayList<>(threadcount);
         try (final TraceScope span = tracer.newScope(CLIENT_INIT_SPAN)) {
-            int opcount;
+            int opCount;
             if (dotransactions) {
-                opcount = Integer.parseInt(props.getProperty(OPERATION_COUNT_PROPERTY, "0"));
+                opCount = Integer.parseInt(props.getProperty(OPERATION_COUNT_PROPERTY, "0"));
             } else {
                 if (props.containsKey(INSERT_COUNT_PROPERTY)) {
-                    opcount = Integer.parseInt(props.getProperty(INSERT_COUNT_PROPERTY, "0"));
+                    opCount = Integer.parseInt(props.getProperty(INSERT_COUNT_PROPERTY, "0"));
                 } else {
-                    opcount = Integer.parseInt(props.getProperty(RECORD_COUNT_PROPERTY, DEFAULT_RECORD_COUNT));
+                    opCount = Integer.parseInt(props.getProperty(RECORD_COUNT_PROPERTY, DEFAULT_RECORD_COUNT));
                 }
             }
-            if (threadcount > opcount) {
-                threadcount = opcount;
+            if (threadcount > opCount) {
+                threadcount = opCount;
                 XxlJobHelper.log("Warning: the threadcount is bigger than recordcount, the threadcount will be recordcount!");
             }
             for (int threadid = 0; threadid < threadcount; threadid++) {
@@ -157,10 +157,10 @@ public final class YcsbDbClientThreadThread extends AbstractYcsbDbClientThread {
                     break;
                 }
 
-                int threadopcount = opcount / threadcount;
+                int threadopcount = opCount / threadcount;
 
-                // ensure correct number of operations, in case opcount is not a multiple of threadcount
-                if (threadid < opcount % threadcount) {
+                // ensure correct number of operations, in case opCount is not a multiple of threadcount
+                if (threadid < opCount % threadcount) {
                     ++threadopcount;
                 }
 

@@ -129,7 +129,8 @@ public class JobLogController {
 
         model.addAttribute("triggerCode", jobLog.getTriggerCode());
         model.addAttribute("handleCode", jobLog.getHandleCode());
-        model.addAttribute("executorAddress", jobLog.getExecutorAddress());
+		// 多个执行器列表下，会有\r\n字符存在 导致前端页面报错
+        model.addAttribute("executorAddress", jobLog.getExecutorAddress().trim());
         model.addAttribute("triggerTime", jobLog.getTriggerTime().getTime());
         model.addAttribute("logId", jobLog.getId());
 		return "joblog/joblog.detail";

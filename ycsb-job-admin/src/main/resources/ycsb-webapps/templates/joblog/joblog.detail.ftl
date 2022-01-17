@@ -63,6 +63,7 @@
     var triggerCode = '${triggerCode}';
     var handleCode = '${handleCode}';
     var executorAddress = '${executorAddress!}';
+    console.log(executorAddress);
     var triggerTime = '${triggerTime?c}';
     var logId = '${logId}';
 </script>

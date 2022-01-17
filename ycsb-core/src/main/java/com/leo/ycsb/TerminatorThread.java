@@ -72,6 +72,7 @@ public class TerminatorThread extends Thread {
           }
         } catch (InterruptedException e) {
           // Do nothing. Don't know why I was interrupted.
+          e.printStackTrace();
         }
       }
     }
