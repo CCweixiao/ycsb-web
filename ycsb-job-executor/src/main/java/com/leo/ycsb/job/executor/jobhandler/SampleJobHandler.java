@@ -1,6 +1,6 @@
 package com.leo.ycsb.job.executor.jobhandler;
 
-import com.leo.ycsb.Client;
+
 import com.leo.ycsb.job.core.context.XxlJobHelper;
 import com.leo.ycsb.job.core.handler.annotation.XxlJob;
 import org.slf4j.Logger;

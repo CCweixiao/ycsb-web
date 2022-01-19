@@ -184,11 +184,11 @@ public final class YcsbDbClientThreadThread extends AbstractYcsbDbClientThread {
                 .build();
     }
 
-    private void initWorkload(Properties props, Thread warningthread, Workload workload, Tracer tracer) {
+    private void initWorkload(Properties props, Thread warningThread, Workload workload, Tracer tracer) {
         try {
             try (final TraceScope span = tracer.newScope(CLIENT_WORKLOAD_INIT_SPAN)) {
                 workload.init(props);
-                warningthread.interrupt();
+                warningThread.interrupt();
             }
         } catch (WorkloadException e) {
             XxlJobHelper.log(e);

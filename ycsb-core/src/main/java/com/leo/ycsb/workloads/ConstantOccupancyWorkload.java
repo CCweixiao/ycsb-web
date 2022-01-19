@@ -16,8 +16,9 @@
  */
 package com.leo.ycsb.workloads;
 
-import com.leo.ycsb.Client;
+
 import com.leo.ycsb.WorkloadException;
+import com.leo.ycsb.YcsbDbClientThreadThread;
 import com.leo.ycsb.generator.NumberGenerator;
 
 import java.util.Properties;
@@ -64,9 +65,9 @@ public class ConstantOccupancyWorkload extends CoreWorkload {
     storageages = Long.parseLong(p.getProperty(STORAGE_AGE_PROPERTY, String.valueOf(STORAGE_AGE_PROPERTY_DEFAULT)));
     occupancy = Double.parseDouble(p.getProperty(OCCUPANCY_PROPERTY, String.valueOf(OCCUPANCY_PROPERTY_DEFAULT)));
 
-    if (p.getProperty(Client.RECORD_COUNT_PROPERTY) != null ||
-        p.getProperty(Client.INSERT_COUNT_PROPERTY) != null ||
-        p.getProperty(Client.OPERATION_COUNT_PROPERTY) != null) {
+    if (p.getProperty(YcsbDbClientThreadThread.RECORD_COUNT_PROPERTY) != null ||
+        p.getProperty(YcsbDbClientThreadThread.INSERT_COUNT_PROPERTY) != null ||
+        p.getProperty(YcsbDbClientThreadThread.OPERATION_COUNT_PROPERTY) != null) {
       System.err.println("Warning: record, insert or operation count was set prior to initting " +
           "ConstantOccupancyWorkload.  Overriding old values.");
     }
@@ -78,9 +79,9 @@ public class ConstantOccupancyWorkload extends CoreWorkload {
     if (objectCount == 0) {
       throw new IllegalStateException("Object count was zero.  Perhaps disksize is too low?");
     }
-    p.setProperty(Client.RECORD_COUNT_PROPERTY, String.valueOf(objectCount));
-    p.setProperty(Client.OPERATION_COUNT_PROPERTY, String.valueOf(storageages * objectCount));
-    p.setProperty(Client.INSERT_COUNT_PROPERTY, String.valueOf(objectCount));
+    p.setProperty(YcsbDbClientThreadThread.RECORD_COUNT_PROPERTY, String.valueOf(objectCount));
+    p.setProperty(YcsbDbClientThreadThread.OPERATION_COUNT_PROPERTY, String.valueOf(storageages * objectCount));
+    p.setProperty(YcsbDbClientThreadThread.INSERT_COUNT_PROPERTY, String.valueOf(objectCount));
 
     super.init(p);
   }

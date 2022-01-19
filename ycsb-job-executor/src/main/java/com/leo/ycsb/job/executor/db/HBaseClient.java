@@ -29,11 +29,8 @@ import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.filter.PageFilter;
 import org.apache.hadoop.hbase.util.Bytes;
 
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,8 +38,8 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.leo.ycsb.workloads.CoreWorkload.TABLENAME_PROPERTY;
-import static com.leo.ycsb.workloads.CoreWorkload.TABLENAME_PROPERTY_DEFAULT;
+import static com.leo.ycsb.workloads.CoreWorkload.TABLE_NAME_PROPERTY;
+import static com.leo.ycsb.workloads.CoreWorkload.TABLE_NAME_PROPERTY_DEFAULT;
 
 /**
  * @author leojie 2021/2/11 12:16 上午
@@ -125,7 +122,7 @@ public class HBaseClient extends com.leo.ycsb.DB{
             }
         }
 
-        String table = getProperties().getProperty(TABLENAME_PROPERTY, TABLENAME_PROPERTY_DEFAULT);
+        String table = getProperties().getProperty(TABLE_NAME_PROPERTY, TABLE_NAME_PROPERTY_DEFAULT);
         String configFilePath = getProperties().getProperty("hbase.config.file.path","hbase-site.xml");
         try {
             THREAD_COUNT.getAndIncrement();

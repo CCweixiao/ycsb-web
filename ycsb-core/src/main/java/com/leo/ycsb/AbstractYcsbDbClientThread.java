@@ -280,7 +280,7 @@ public abstract class AbstractYcsbDbClientThread extends Thread {
     }
 
     protected static Workload getWorkload(Properties props) {
-        ClassLoader classLoader = Client.class.getClassLoader();
+        ClassLoader classLoader = YcsbDbClientThreadThread.class.getClassLoader();
         XxlJobHelper.log("YCSB Client is 0.17.0");
         XxlJobHelper.log("Loading workload...");
 

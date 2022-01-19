@@ -1,6 +1,5 @@
 package com.leo.ycsb.job.executor.jobhandler;
 
-import com.leo.ycsb.Client;
 import com.leo.ycsb.YcsbDbClientThreadThread;
 import com.leo.ycsb.job.core.context.XxlJobHelper;
 import com.leo.ycsb.job.core.handler.annotation.XxlJob;
@@ -23,14 +22,16 @@ public class YcsbJobHandler {
         // param parse
         String param = XxlJobHelper.getJobParam();
         if (param == null || param.trim().length() == 0) {
-            Client.usageMessage();
+            YcsbDbClientThreadThread.usageMessage();
             XxlJobHelper.handleFail();
             return;
         }
        String[] args = Arrays.stream(param.split("\\s+"))
                 .filter(x -> x != null && x.trim().length()>0).toArray(String[]::new);
-       //  Client.mainWork(args);
+
         dbClientThread = new YcsbDbClientThreadThread(args);
+        dbClientThread.setName("YcsbDbClientThreadThread");
+
         dbClientThread.start();
         try {
             dbClientThread.join();
@@ -40,12 +41,15 @@ public class YcsbJobHandler {
     }
 
     public void init() {
+        XxlJobHelper.log("YcsbJobHandler init successfully.");
         logger.info("YcsbJobHandler init successfully.");
     }
 
     public void destroy() {
         logger.info("YcsbJobHandler destroy ...");
+        XxlJobHelper.log("YcsbJobHandler start destroying ...");
         dbClientThread.toStop();
         logger.info("YcsbJobHandler destroy successfully.");
+        XxlJobHelper.log("YcsbJobHandler has destroyed successfully.");
     }
 }

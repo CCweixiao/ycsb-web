@@ -18,8 +18,6 @@ package com.leo.ycsb.workloads;
 
 import com.leo.ycsb.*;
 import com.leo.ycsb.generator.*;
-import com.leo.ycsb.*;
-import com.leo.ycsb.generator.*;
 import com.leo.ycsb.measurements.Measurements;
 
 import java.util.*;
@@ -522,8 +520,8 @@ public class TimeSeriesWorkload extends Workload {
   public void init(final Properties p) throws WorkloadException {
     properties = p;
     recordcount =
-        Integer.parseInt(p.getProperty(Client.RECORD_COUNT_PROPERTY, 
-            Client.DEFAULT_RECORD_COUNT));
+        Integer.parseInt(p.getProperty(YcsbDbClientThreadThread.RECORD_COUNT_PROPERTY,
+                YcsbDbClientThreadThread.DEFAULT_RECORD_COUNT));
     if (recordcount == 0) {
       recordcount = Integer.MAX_VALUE;
     }
@@ -654,7 +652,7 @@ public class TimeSeriesWorkload extends Workload {
     delayedIntervals = Integer.parseInt(p.getProperty(DELAYED_INTERVALS_PROPERTY, DELAYED_INTERVALS_PROPERTY_DEFAULT));
     
     valueType = ValueType.fromString(p.getProperty(VALUE_TYPE_PROPERTY, VALUE_TYPE_PROPERTY_DEFAULT));
-    table = p.getProperty(CoreWorkload.TABLENAME_PROPERTY, CoreWorkload.TABLENAME_PROPERTY_DEFAULT);
+    table = p.getProperty(CoreWorkload.TABLE_NAME_PROPERTY, CoreWorkload.TABLE_NAME_PROPERTY_DEFAULT);
     initKeysAndTags();
     validateSettings();
   }
@@ -934,7 +932,7 @@ public class TimeSeriesWorkload extends Workload {
     tagKeyGenerator = new IncrementingPrintableStringGenerator(tagKeyLength);
     tagValueGenerator = new IncrementingPrintableStringGenerator(tagValueLength);
     
-    final int threads = Integer.parseInt(properties.getProperty(Client.THREAD_COUNT_PROPERTY, "1"));
+    final int threads = Integer.parseInt(properties.getProperty(YcsbDbClientThreadThread.THREAD_COUNT_PROPERTY, "1"));
     final String tagCardinalityString = properties.getProperty(
         TAG_CARDINALITY_PROPERTY, 
         TAG_CARDINALITY_PROPERTY_DEFAULT);

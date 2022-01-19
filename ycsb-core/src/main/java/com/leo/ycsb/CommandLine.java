@@ -43,7 +43,7 @@ public final class CommandLine {
     System.out.println("  -p name=value: Specify a property value");
     System.out.println("  -db classname: Use a specified DB class (can also set the \"db\" property)");
     System.out.println("  -table tablename: Use the table name instead of the default \"" +
-        CoreWorkload.TABLENAME_PROPERTY_DEFAULT + "\"");
+        CoreWorkload.TABLE_NAME_PROPERTY_DEFAULT + "\"");
     System.out.println();
   }
 
@@ -77,10 +77,10 @@ public final class CommandLine {
     System.out.println("Type \"help\" for command line help");
     System.out.println("Start with \"-help\" for usage info");
 
-    String table = props.getProperty(CoreWorkload.TABLENAME_PROPERTY, CoreWorkload.TABLENAME_PROPERTY_DEFAULT);
+    String table = props.getProperty(CoreWorkload.TABLE_NAME_PROPERTY, CoreWorkload.TABLE_NAME_PROPERTY_DEFAULT);
 
     //create a DB
-    String dbname = props.getProperty(Client.DB_PROPERTY, DEFAULT_DB);
+    String dbname = props.getProperty(YcsbDbClientThreadThread.DB_PROPERTY, DEFAULT_DB);
 
     ClassLoader classLoader = CommandLine.class.getClassLoader();
 
@@ -174,7 +174,7 @@ public final class CommandLine {
           usageMessage();
           System.exit(0);
         }
-        props.setProperty(Client.DB_PROPERTY, args[argindex]);
+        props.setProperty(YcsbDbClientThreadThread.DB_PROPERTY, args[argindex]);
         argindex++;
       } else if (args[argindex].compareTo("-P") == 0) {
         argindex++;
@@ -221,7 +221,7 @@ public final class CommandLine {
           usageMessage();
           System.exit(0);
         }
-        props.put(CoreWorkload.TABLENAME_PROPERTY, args[argindex]);
+        props.put(CoreWorkload.TABLE_NAME_PROPERTY, args[argindex]);
 
         argindex++;
       } else {

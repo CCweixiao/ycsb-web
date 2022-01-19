@@ -19,8 +19,6 @@ package com.leo.ycsb.workloads;
 
 import com.leo.ycsb.*;
 import com.leo.ycsb.generator.*;
-import com.leo.ycsb.*;
-import com.leo.ycsb.generator.*;
 import com.leo.ycsb.measurements.Measurements;
 
 import java.io.IOException;
@@ -70,12 +68,12 @@ public class CoreWorkload extends Workload {
   /**
    * The name of the database table to run queries against.
    */
-  public static final String TABLENAME_PROPERTY = "table";
+  public static final String TABLE_NAME_PROPERTY = "table";
 
   /**
    * The default name of the database table to run queries against.
    */
-  public static final String TABLENAME_PROPERTY_DEFAULT = "usertable";
+  public static final String TABLE_NAME_PROPERTY_DEFAULT = "usertable";
 
   protected String table;
 
@@ -393,7 +391,8 @@ public class CoreWorkload extends Workload {
    */
   @Override
   public void init(Properties p) throws WorkloadException {
-    table = p.getProperty(TABLENAME_PROPERTY, TABLENAME_PROPERTY_DEFAULT);
+
+    table = p.getProperty(TABLE_NAME_PROPERTY, TABLE_NAME_PROPERTY_DEFAULT);
 
     fieldcount =
         Long.parseLong(p.getProperty(FIELD_COUNT_PROPERTY, FIELD_COUNT_PROPERTY_DEFAULT));
@@ -405,7 +404,7 @@ public class CoreWorkload extends Workload {
     fieldlengthgenerator = CoreWorkload.getFieldLengthGenerator(p);
 
     recordcount =
-        Long.parseLong(p.getProperty(Client.RECORD_COUNT_PROPERTY, Client.DEFAULT_RECORD_COUNT));
+        Long.parseLong(p.getProperty(YcsbDbClientThreadThread.RECORD_COUNT_PROPERTY, YcsbDbClientThreadThread.DEFAULT_RECORD_COUNT));
     if (recordcount == 0) {
       recordcount = Integer.MAX_VALUE;
     }
@@ -481,7 +480,7 @@ public class CoreWorkload extends Workload {
       // the keyspace doesn't change from the perspective of the scrambled zipfian generator
       final double insertproportion = Double.parseDouble(
           p.getProperty(INSERT_PROPORTION_PROPERTY, INSERT_PROPORTION_PROPERTY_DEFAULT));
-      int opcount = Integer.parseInt(p.getProperty(Client.OPERATION_COUNT_PROPERTY));
+      int opcount = Integer.parseInt(p.getProperty(YcsbDbClientThreadThread.OPERATION_COUNT_PROPERTY));
       int expectednewkeys = (int) ((opcount) * insertproportion * 2.0); // 2 is fudge factor
 
       keychooser = new ScrambledZipfianGenerator(insertstart, insertstart + insertcount + expectednewkeys);
@@ -513,6 +512,11 @@ public class CoreWorkload extends Workload {
         INSERTION_RETRY_LIMIT, INSERTION_RETRY_LIMIT_DEFAULT));
     insertionRetryInterval = Integer.parseInt(p.getProperty(
         INSERTION_RETRY_INTERVAL, INSERTION_RETRY_INTERVAL_DEFAULT));
+  }
+
+  @Override
+  public void cleanup() throws WorkloadException {
+    super.cleanup();
   }
 
   protected String buildKeyName(long keynum) {
